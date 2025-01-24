@@ -1,0 +1,5 @@
+pipeline:
+  stages:
+    data_ingestion:
+      gdrive_url: "https://drive.google.com/uc?id=14cOM7gDRkhIo7qye4lI_9MK02vDAkqqU"
+      output_path: "data/raw/hotel.csv"

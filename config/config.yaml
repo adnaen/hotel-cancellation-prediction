@@ -1,6 +1,0 @@
-data_ingestion:
-  output_path: "raw/hotel_booking.csv"
-
-data_cleaning:
-  output_path: "cleaned/cleaned.csv"
-
