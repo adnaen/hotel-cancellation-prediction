@@ -3,7 +3,7 @@ from pathlib import Path
 
 class BasePaths:
 
-    PROJECT_DIR: Path = Path(__file__).resolve().parents[1]
+    PROJECT_DIR: Path = Path(__file__).resolve().parents[2]
     DATA_DIR: Path = PROJECT_DIR / "data"
     ARTIFACTS_DIR: Path = PROJECT_DIR / "artifacts"
     CONFIG_DIR: Path = PROJECT_DIR / "config"

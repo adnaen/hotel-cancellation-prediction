@@ -9,9 +9,7 @@ file_path.parent.mkdir(exist_ok=True, parents=True)
 file_path.touch(exist_ok=True)
 
 
-format = (
-    "%(asctime)s from: %(filename)s in: %(module)s at: %(lineno)d issue: %(message)s"
-)
+format = "%(asctime)s from: %(filename)s at_line: %(lineno)d : %(message)s"
 
 logging.basicConfig(
     format=format,

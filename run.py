@@ -1,9 +1,10 @@
-from src import DataIngestionConfig
-from src.paths import BasePaths
+from src.config import DataIngestionConfig
+from src.config import BasePaths
 from src.stages import DataIngestion
 from src.utils import load_yaml
 
 
+print(f"PROJECT_PATH : {BasePaths.PROJECT_DIR}")
 configs = load_yaml(BasePaths.resolve("config/config.yml"))
 
 data_ingestion_config = configs["pipeline"]["stages"]["data_ingestion"]
