@@ -1,5 +1,4 @@
-from src.config import DataIngestionConfig
-from src.config import BasePaths
+from src.config import DataIngestionConfig, BasePaths
 from src.stages import DataIngestion
 from src.utils import load_yaml
 
