@@ -1,0 +1,26 @@
+stages:
+  data_ingestion:
+    source_url: "https://drive.google.com/uc?id=14cOM7gDRkhIo7qye4lI_9MK02vDAkqqU"
+    download_path: "data/raw/hotel.csv"
+
+  data_cleaning:
+    input_path: "data/raw/hotel.csv"
+    output_path: "data/cleaned/cleaned.csv"
+
+    columns_to_drop:
+      - email
+      - phone-number
+      - credit_card
+      - name
+      - company
+
+    dtype_convertion:
+      children: int
+      agent: int
+      reservation_status_date: datetime
+
+    missing_values:
+      categorical: country
+      numerical:
+        - children
+        - agent
