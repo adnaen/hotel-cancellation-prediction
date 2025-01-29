@@ -15,9 +15,11 @@ class DataCleaning:
         self.df = convert_dtype(df=self.df, columns=self.config.dtype_convertion)
 
     def handle_missing_values(self) -> None:
-        # print(self.df.isna().sum())
         self.df = handle_missing_values(df=self.df, columns=self.config.missing_values)
-        # print(self.df.isna().sum())
+
+    def treat_outliers(self) -> None:
+        # TODO:
+        raise NotImplementedError
 
     def run(self) -> bool:
         drop_columns_status = self.drop_columns()

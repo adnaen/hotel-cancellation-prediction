@@ -31,18 +31,17 @@ def convert_dtype(df: pd.DataFrame, columns: dict[str, str]) -> pd.DataFrame:
 def handle_missing_values(
     df: pd.DataFrame, columns: dict[str, list[str] | str]
 ) -> pd.DataFrame:
-    # FIXME: fix this shit
     for dtype, column in columns.items():
-
         if isinstance(column, str):
             column = [column]
 
-            for each in column:
+        for each in column:
 
-                match dtype:
-                    case "categorical":
-                        simple_imputer = SimpleImputer(strategy="most_frequent")
-                    case "numerical":
-                        simple_imputer = SimpleImputer(strategy="mean")
-                df[each] = simple_imputer.fit_transform(df[[each]])
+            match dtype:
+                case "categorical":
+                    simple_imputer = SimpleImputer(strategy="most_frequent")
+                    df[each] = simple_imputer.fit_transform(df[[each]]).ravel()
+                case "numerical":
+                    simple_imputer = SimpleImputer(strategy="mean")
+                    df[each] = simple_imputer.fit_transform(df[[each]]).ravel()
     return df

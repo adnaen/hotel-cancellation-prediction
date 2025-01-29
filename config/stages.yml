@@ -24,3 +24,10 @@ stages:
       numerical:
         - children
         - agent
+
+    outlier_columns:
+      - lead_time
+      - arrival_date_week_number
+      - agent
+      - company
+      - adr
