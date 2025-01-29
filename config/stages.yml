@@ -26,8 +26,9 @@ stages:
         - agent
 
     outlier_columns:
-      - lead_time
-      - arrival_date_week_number
-      - agent
-      - company
-      - adr
+      iqr:
+        - arrival_date_week_number
+      log:
+        - lead_time
+        - agent
+        - adr

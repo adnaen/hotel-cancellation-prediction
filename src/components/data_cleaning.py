@@ -1,33 +1,71 @@
-from src.utils import load_csv, convert_dtype, handle_missing_values
 from src.entity import DataCleaningConfig
+from src.utils import (
+    load_csv,
+    save_csv,
+    convert_dtype,
+    handle_missing_values,
+    handle_outliers,
+)
+from src.config import logger
 
 
 class DataCleaning:
     def __init__(self, config: DataCleaningConfig) -> None:
         self.config = config
         self.df = load_csv(self.config.input_path)
+        logger.info("DATA CLEANING STARTED")
 
     def drop_columns(self) -> bool:
-        self.df = self.df.drop(columns=self.config.columns_to_drop)
-        return True
+        try:
+            df_copy = self.df.copy(deep=True)
+            df_copy = df_copy.drop(columns=self.config.columns_to_drop)
+            self.df = df_copy
+            logger.info("droped unqanted column")
+            return True
+        except Exception:
+            return False
 
-    def dtype_conversion(self) -> None:
-        self.df = convert_dtype(df=self.df, columns=self.config.dtype_convertion)
+    def dtype_conversion(self) -> bool:
+        try:
+            df_copy = self.df.copy(deep=True)
+            df_copy = convert_dtype(df=df_copy, columns=self.config.dtype_convertion)
+            self.df = df_copy
+            logger.info("convert dtypes")
+            return True
+        except Exception:
+            return False
 
-    def handle_missing_values(self) -> None:
-        self.df = handle_missing_values(df=self.df, columns=self.config.missing_values)
+    def handle_missing_values(self) -> bool:
+        try:
+            df_copy = self.df.copy(deep=True)
+            df_copy = handle_missing_values(
+                df=df_copy, columns=self.config.missing_values
+            )
+            self.df = df_copy
+            logger.info("missing values handled")
+            return True
+        except Exception:
+            return False
 
-    def treat_outliers(self) -> None:
-        # TODO:
-        raise NotImplementedError
+    def treat_outliers(self) -> bool:
+        try:
+            df_copy = self.df.copy(deep=True)
+            df_copy = handle_outliers(
+                df=df_copy, columns_maps=self.config.outlier_columns
+            )
+            self.df = df_copy
+            logger.info("outlier treatment complete")
+            return True
+        except Exception as e:
+            return False
 
     def run(self) -> bool:
-        drop_columns_status = self.drop_columns()
-        dtype_convertion_status = self.dtype_conversion()
-        handle_missing_value_status = self.handle_missing_values()
-        if all(
-            (drop_columns_status, dtype_convertion_status, handle_missing_value_status)
-        ):
+        step1 = self.drop_columns()
+        step2 = self.dtype_conversion()
+        step3 = self.handle_missing_values()
+        step4 = self.treat_outliers()
+        if all((step1, step2, step3, step4)):
+            save_csv(df=self.df, path=self.config.output_path)
             return True
         else:
             return False

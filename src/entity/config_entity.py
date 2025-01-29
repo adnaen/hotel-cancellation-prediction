@@ -15,4 +15,4 @@ class DataCleaningConfig:
     columns_to_drop: list[str]
     dtype_convertion: dict[str, str]
     missing_values: dict[str, str | list[str]]
-    outlier_columns: list[str]
+    outlier_columns: dict[str, str | list[str]]
