@@ -16,3 +16,10 @@ class DataCleaningConfig:
     dtype_convertion: dict[str, str]
     missing_values: dict[str, str | list[str]]
     outlier_columns: dict[str, str | list[str]]
+
+
+@dataclass
+class DataValidationConfig:
+    input_path: Path
+    no_of_columns: int
+    dtype_counts: dict[str, int]

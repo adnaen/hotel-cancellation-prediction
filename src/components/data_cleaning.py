@@ -1,11 +1,6 @@
 from src.entity import DataCleaningConfig
-from src.utils import (
-    load_csv,
-    save_csv,
-    convert_dtype,
-    handle_missing_values,
-    handle_outliers,
-)
+from src.utils import load_csv, save_csv
+from src.utils.stages_utils import convert_dtype, handle_missing_values, handle_outliers
 from src.config import logger
 
 
@@ -41,6 +36,7 @@ class DataCleaning:
             df_copy = handle_missing_values(
                 df=df_copy, columns=self.config.missing_values
             )
+            df_copy = df_copy[~df_copy.duplicated()]
             self.df = df_copy
             logger.info("missing values handled")
             return True
@@ -56,7 +52,7 @@ class DataCleaning:
             self.df = df_copy
             logger.info("outlier treatment complete")
             return True
-        except Exception as e:
+        except Exception:
             return False
 
     def run(self) -> bool:

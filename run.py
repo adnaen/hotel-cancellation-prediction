@@ -1,7 +1,6 @@
 from src.config import BasePaths
-from src.entity import DataIngestionConfig
-from src.components import DataIngestion, DataCleaning
-from src.entity.config_entity import DataCleaningConfig
+from src.entity import DataIngestionConfig, DataCleaningConfig, DataValidationConfig
+from src.components import DataIngestion, DataCleaning, DataValidation
 from src.utils import get_config
 
 
@@ -14,6 +13,9 @@ data_cleaning_config = get_config(
     yaml_path=config_path, keys=["stages", "data_cleaning"]
 )
 
+data_validation_config = get_config(
+    yaml_path=config_path, keys=["stages", "data_validation"]
+)
 
 ingestion_config = DataIngestionConfig(
     source_url=data_ingestion_config["source_url"],
@@ -30,9 +32,17 @@ cleaning_config = DataCleaningConfig(
     outlier_columns=data_cleaning_config["outlier_columns"],
 )
 
+validation_config = DataValidationConfig(
+    input_path=BasePaths.resolve(data_validation_config["input_path"]),
+    no_of_columns=data_validation_config["no_of_columns"],
+    dtype_counts=data_validation_config["dtype_counts"],
+)
 
 data_ing = DataIngestion(config=ingestion_config)
-stage1 = data_ing.run()
-if stage1:
-    data_clean = DataCleaning(config=cleaning_config)
-    data_clean.run()
+data_ing.run()
+
+data_clean = DataCleaning(config=cleaning_config)
+data_clean.run()
+
+data_valid = DataValidation(config=validation_config)
+data_valid.run()

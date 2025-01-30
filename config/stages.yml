@@ -32,3 +32,12 @@ stages:
         - lead_time
         - agent
         - adr
+
+  data_validation:
+      input_path: "data/cleaned/cleaned.csv"
+      no_of_columns: 31
+      dtype_counts:
+        integer: 15
+        float: 4
+        object: 11
+        datetime: 1

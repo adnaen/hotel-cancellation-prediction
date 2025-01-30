@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
+from src.config import logger
 
 
 def convert_dtype(df: pd.DataFrame, columns: dict[str, str]) -> pd.DataFrame:
@@ -72,11 +73,12 @@ def handle_outliers(
                     case "log":
                         min_val = df[column].min()
                         if min_val <= 0:
-                            df[column] = np.log1p(df[column])
+                            shift_value = abs(min_val) + 1
+                            df[column] = np.log(df[column] + shift_value)
                         else:
                             df[column] = np.log(df[column])
         return df
 
     except Exception as e:
-        print(f"Error during outlier handling: {e}")
+        logger.error(f"error in OUTLIER TREATMENT: {e}")
         return df
