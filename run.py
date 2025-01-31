@@ -1,6 +1,15 @@
 from src.config import BasePaths
-from src.entity import DataIngestionConfig, DataCleaningConfig, DataValidationConfig
-from src.components import DataIngestion, DataCleaning, DataValidation
+from src.entity import (
+    DataIngestionConfig,
+    DataCleaningConfig,
+    DataValidationConfig,
+    DataPreprocessingConfig,
+)
+from src.components import (
+    DataIngestion,
+    DataValidation,
+    DataTransform,
+)
 from src.utils import get_config
 
 
@@ -15,6 +24,10 @@ data_cleaning_config = get_config(
 
 data_validation_config = get_config(
     yaml_path=config_path, keys=["stages", "data_validation"]
+)
+
+data_preprocessing_config = get_config(
+    yaml_path=config_path, keys=["stages", "data_preprocessing"]
 )
 
 ingestion_config = DataIngestionConfig(
@@ -38,11 +51,20 @@ validation_config = DataValidationConfig(
     dtype_counts=data_validation_config["dtype_counts"],
 )
 
-data_ing = DataIngestion(config=ingestion_config)
-data_ing.run()
+preprocessing_config = DataPreprocessingConfig(
+    input_path=BasePaths.resolve(data_preprocessing_config["input_path"]),
+    output_path=BasePaths.resolve(data_preprocessing_config["output_path"]),
+    encodings=data_preprocessing_config["encodings"],
+)
 
-data_clean = DataCleaning(config=cleaning_config)
-data_clean.run()
+# data_ing = DataIngestion(config=ingestion_config)
+# data_ing.run()
+#
+# data_clean = DataCleaning(config=cleaning_config)
+# data_clean.run()
+#
+# data_valid = DataValidation(config=validation_config)
+# data_valid.run()
 
-data_valid = DataValidation(config=validation_config)
-data_valid.run()
+data_prepro = DataPreprocessing(config=preprocessing_config)
+data_prepro.run()

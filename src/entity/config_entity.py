@@ -23,3 +23,10 @@ class DataValidationConfig:
     input_path: Path
     no_of_columns: int
     dtype_counts: dict[str, int]
+
+
+@dataclass
+class DataPreprocessingConfig:
+    input_path: Path
+    output_path: Path
+    encodings: dict[str, list[str]]

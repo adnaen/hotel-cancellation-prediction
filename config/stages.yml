@@ -1,43 +1,57 @@
-stages:
-  data_ingestion:
-    source_url: "https://drive.google.com/uc?id=14cOM7gDRkhIo7qye4lI_9MK02vDAkqqU"
-    download_path: "data/raw/hotel.csv"
+data_ingestion:
+  source_url: "https://drive.google.com/uc?id=14cOM7gDRkhIo7qye4lI_9MK02vDAkqqU"
+  download_path: "artifacts/data_ingestion/hotel_cancellation.csv"
 
-  data_cleaning:
-    input_path: "data/raw/hotel.csv"
-    output_path: "data/cleaned/cleaned.csv"
+data_transform:
+  input_path: "artifacts/data_ingestion/hotel_cancellation.csv"
+  output_path: "artifacts/data_transform/transformed.csv"
 
-    columns_to_drop:
-      - email
-      - phone-number
-      - credit_card
-      - name
-      - company
+  columns_to_drop:
+    - email
+    - phone-number
+    - credit_card
+    - name
+    - company
 
-    dtype_convertion:
-      children: int
-      agent: int
-      reservation_status_date: datetime
+  dtype_convertion:
+    children: int
+    agent: int
+    reservation_status_date: datetime
 
-    missing_values:
-      categorical: country
-      numerical:
-        - children
-        - agent
+  missing_values:
+    categorical: country
+    numerical:
+      - children
+      - agent
 
-    outlier_columns:
-      iqr:
-        - arrival_date_week_number
-      log:
-        - lead_time
-        - agent
-        - adr
+  outlier_columns:
+    iqr:
+      - arrival_date_week_number
+    log:
+      - lead_time
+      - agent
+      - adr
+  encodings:
+    LabelEncoder:
+      - hotel
+      - arrival_date_month
+      - meal
+      - market_segment
+      - distribution_channel
+      - reserved_room_type
+      - assigned_room_type
+      - reservation_status
+      - customer_type
+      - deposit_type
+    TargetEncoder:
+      - country
 
-  data_validation:
-      input_path: "data/cleaned/cleaned.csv"
-      no_of_columns: 31
-      dtype_counts:
-        integer: 15
-        float: 4
-        object: 11
-        datetime: 1
+data_validation:
+  input_path: "artifacts/data_cleaning/transformed.csv"
+  no_of_columns: 31
+  dtype_counts:
+    integer: 15
+    float: 4
+    object: 11
+    datetime: 1
+

@@ -49,8 +49,8 @@ class DataValidation:
         structure_validation = self.structural_validation()
         integretity_validation = self.integrity_validation()
         if all((structure_validation, integretity_validation)):
-            print("data validation success")
+            logger.info("DATA VALIDATION COMPLETED!")
             return True
         else:
-            print("it sucks")
+            logger.error("SOME MISS BEHAVE OCCURED WHILE DATA VALIDATION")
             return False

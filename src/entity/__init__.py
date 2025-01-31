@@ -1,1 +1,6 @@
-from .config_entity import DataCleaningConfig, DataIngestionConfig, DataValidationConfig
+from .config_entity import (
+    DataCleaningConfig,
+    DataIngestionConfig,
+    DataValidationConfig,
+    DataPreprocessingConfig,
+)
