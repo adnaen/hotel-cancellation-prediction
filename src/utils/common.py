@@ -7,7 +7,7 @@ from src.config import logger
 def from_gdrive(url: str, filename: Path) -> bool:
     if not filename.exists():
         create_path(filename)
-        status = gdown.download(url=url, output=str(filename), quiet=False)
+        status = gdown.download(url=url, output=str(filename), quiet=True)
         if status:
             logger.info(f"dataset downloaded at: {filename}")
             return True

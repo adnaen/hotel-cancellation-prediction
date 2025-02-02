@@ -9,13 +9,18 @@ class DataIngestionConfig:
 
 
 @dataclass
-class DataCleaningConfig:
+class DataTransformationConfig:
     input_path: Path
-    output_path: Path
+    x_output_path: Path
+    y_output_path: Path
     columns_to_drop: list[str]
     dtype_convertion: dict[str, str]
     missing_values: dict[str, str | list[str]]
     outlier_columns: dict[str, str | list[str]]
+    encodings: dict[str, list[str]]
+    target_variable: str
+    numerical_cols: list[str]
+    categorical_cols: list[str]
 
 
 @dataclass
@@ -23,10 +28,3 @@ class DataValidationConfig:
     input_path: Path
     no_of_columns: int
     dtype_counts: dict[str, int]
-
-
-@dataclass
-class DataPreprocessingConfig:
-    input_path: Path
-    output_path: Path
-    encodings: dict[str, list[str]]

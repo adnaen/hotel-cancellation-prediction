@@ -11,9 +11,10 @@ def load_yaml(absolute_path: Path) -> dict:
     return content
 
 
-def get_config(yaml_path: Path, keys: list[str]) -> dict:
+def get_config(yaml_path: Path, keys: list[str] | None = None) -> dict:
     """return the configuration data corresponding its keys"""
     data = load_yaml(yaml_path)
-    for key in keys:
-        data = data[key]
+    if keys:
+        for key in keys:
+            data = data[key]
     return data

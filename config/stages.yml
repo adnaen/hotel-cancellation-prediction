@@ -4,7 +4,8 @@ data_ingestion:
 
 data_transform:
   input_path: "artifacts/data_ingestion/hotel_cancellation.csv"
-  output_path: "artifacts/data_transform/transformed.csv"
+  x_output_path: "artifacts/data_transform/X_transformed.csv"
+  y_output_path: "artifacts/data_transform/Y.csv"
 
   columns_to_drop:
     - email
@@ -14,12 +15,13 @@ data_transform:
     - company
 
   dtype_convertion:
-    children: int
-    agent: int
-    reservation_status_date: datetime
+    children: int64
+    agent: int64
+    reservation_status_date: datetime64[ms]
 
   missing_values:
-    categorical: country
+    categorical:
+      - country
     numerical:
       - children
       - agent
@@ -31,6 +33,7 @@ data_transform:
       - lead_time
       - agent
       - adr
+
   encodings:
     LabelEncoder:
       - hotel

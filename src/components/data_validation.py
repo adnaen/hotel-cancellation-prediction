@@ -1,11 +1,16 @@
 from src.entity import DataValidationConfig
 from src.utils import load_csv
-from src.utils.stages_utils import check_dtypes, is_empty_missing_values
 from src.config import logger
 
 
 class DataValidation:
     def __init__(self, config: DataValidationConfig) -> None:
+        """
+        Initialize Datavalidation class.
+
+        Args:
+            config (DataValidationConfig) : configuration for DataValidation
+        """
         self.config = config
         self.df = load_csv(
             path=self.config.input_path, parse_dates=["reservation_status_date"]

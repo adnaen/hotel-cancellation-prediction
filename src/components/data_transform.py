@@ -1,17 +1,91 @@
 import pandas as pd
-from src.entity import DataPreprocessingConfig
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+
+
+from src.entity import DataTransformationConfig
+from src.utils.transformers import (
+    InitialCleaningTransformer,
+    HandleMissingValuesTransformer,
+    OutlierTransformer,
+)
+
+from src.config import logger
 
 
 class DataTransform:
 
-    def __init__(self, config: DataPreprocessingConfig) -> None:
+    def __init__(self, config: DataTransformationConfig) -> None:
+        """
+        Initialize the DataTransform class.
+
+        Args:
+            config (DataPreprocessingConfig): configurations for data preprocessing stage
+        """
+
         self.config = config
         self.df = pd.read_csv(
             self.config.input_path, parse_dates=["reservation_status_date"]
         )
 
+    def transform(self) -> None:
+        """
+        create preprocessing pipeline
+        """
+        iqr_columns = self.config.outlier_columns["iqr"]
+        log_columns = self.config.outlier_columns["log"]
+        dtype_column_map = self.config.dtype_convertion
+        columns_to_drop = self.config.columns_to_drop
+        numerical_columns = self.config.numerical_cols
+        categorical_columns = self.config.categorical_cols
+
+        self.X = self.df.drop(columns=[self.config.target_variable])
+        self.Y = self.df[self.config.target_variable]
+
+        num_transformer = ColumnTransformer(
+            transformers=[("sclaing", StandardScaler(), numerical_columns)]
+        )
+        cat_transformer = ColumnTransformer(
+            transformers=[
+                ("label_encoding", LabelEncoder(), categorical_columns),
+                ("label_encoding", StandardScaler(), categorical_columns),
+            ]
+        )
+
+        pipeline = Pipeline(
+            steps=[
+                (
+                    "InitialCleaning",
+                    InitialCleaningTransformer(
+                        columns_map=dtype_column_map, columns_to_drop=columns_to_drop
+                    ),
+                ),
+                ("HandleMissingValues", HandleMissingValuesTransformer()),
+                ("IQROutlierTreatment", OutlierTransformer(columns=iqr_columns)),
+                (
+                    "LOGOutlierTreatment",
+                    OutlierTransformer(columns=log_columns, stratergy="log"),
+                ),
+            ]
+        )
+
+        try:
+
+            preprocessed_data = pipeline.fit_transform(self.X)
+            new_x = pd.DataFrame(preprocessed_data)
+            new_x.to_csv(self.config.x_output_path, index=False)
+            self.Y.to_csv(self.config.y_output_path, index=False)
+
+        except Exception as e:
+            logger.error(
+                f"Error occured in {__class__.__name__} while preprocessing pipeline :",
+                e,
+            )
+            raise e
+
     def feature_selection(self) -> bool:
         raise NotImplementedError
 
-    def run(self) -> bool:
-        raise NotImplementedError
+    def run(self) -> None:
+        self.transform()
