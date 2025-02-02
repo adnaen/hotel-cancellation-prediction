@@ -3,14 +3,12 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-
 from src.entity import DataTransformationConfig
 from src.utils.transformers import (
     InitialCleaningTransformer,
     HandleMissingValuesTransformer,
     OutlierTransformer,
 )
-
 from src.config import logger
 
 
@@ -83,9 +81,3 @@ class DataTransform:
                 e,
             )
             raise e
-
-    def feature_selection(self) -> bool:
-        raise NotImplementedError
-
-    def run(self) -> None:
-        self.transform()

@@ -18,14 +18,7 @@ class DataIngestion:
         Download thin
 
         Returns:
-            bool: does the step work ok or not
+            bool: status
         """
         from_gdrive(url=self.config.source_url, filename=self.config.download_path)
         return True
-
-    def run(self) -> bool:
-        download_status = self.download_raw_data()
-        if download_status:
-            return True
-        else:
-            return False
