@@ -1,13 +1,12 @@
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 from src.entity import DataTransformationConfig
 from src.utils.transformers import (
     InitialCleaningTransformer,
     HandleMissingValuesTransformer,
     OutlierTransformer,
+    FeatureEngineeringTransformer,
 )
 from src.config import logger
 
@@ -35,23 +34,11 @@ class DataTransform:
         log_columns = self.config.outlier_columns["log"]
         dtype_column_map = self.config.dtype_convertion
         columns_to_drop = self.config.columns_to_drop
-        numerical_columns = self.config.numerical_cols
-        categorical_columns = self.config.categorical_cols
 
         self.X = self.df.drop(columns=[self.config.target_variable])
         self.Y = self.df[self.config.target_variable]
 
-        num_transformer = ColumnTransformer(
-            transformers=[("sclaing", StandardScaler(), numerical_columns)]
-        )
-        cat_transformer = ColumnTransformer(
-            transformers=[
-                ("label_encoding", LabelEncoder(), categorical_columns),
-                ("label_encoding", StandardScaler(), categorical_columns),
-            ]
-        )
-
-        pipeline = Pipeline(
+        preprocessing_pipeline = Pipeline(
             steps=[
                 (
                     "InitialCleaning",
@@ -65,12 +52,16 @@ class DataTransform:
                     "LOGOutlierTreatment",
                     OutlierTransformer(columns=log_columns, stratergy="log"),
                 ),
+                (
+                    "FeatureEngineering",
+                    FeatureEngineeringTransformer(),
+                ),
             ]
         )
 
         try:
 
-            preprocessed_data = pipeline.fit_transform(self.X)
+            preprocessed_data = preprocessing_pipeline.fit_transform(self.X)
             new_x = pd.DataFrame(preprocessed_data)
             new_x.to_csv(self.config.x_output_path, index=False)
             self.Y.to_csv(self.config.y_output_path, index=False)

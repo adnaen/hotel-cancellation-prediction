@@ -1,6 +1,10 @@
 from pathlib import Path
 from dataclasses import dataclass
 
+#
+# Data schema for Pipeline Configuration
+#
+
 
 @dataclass
 class DataIngestionConfig:
