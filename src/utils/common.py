@@ -15,9 +15,9 @@ def from_gdrive(url: str, filename: Path) -> bool:
     Returns:
         bool : status
     """
-    if not filename.exists():
+    if not is_exists(filename):
         create_path(filename)
-        status = gdown.download(url=url, output=str(filename), quiet=True)
+        status = gdown.download(url=url, output=str(filename), quiet=False)
         if status:
             logger.info(f"dataset downloaded at: {filename}")
             return True
@@ -27,22 +27,6 @@ def from_gdrive(url: str, filename: Path) -> bool:
 
     logger.info(f"dataset already exist at {filename}")
     return False
-
-
-def is_exists(path: str | Path, else_create: bool = False) -> bool:
-    """
-    Check if the path does exists.
-
-    Args:
-        path (str | Path) : path to check
-        else_create (bool) : create the path if is not exists.
-
-    Returns:
-        bool : status
-    """
-    if else_create:
-        return create_path(path)
-    return os.path.exists(path)
 
 
 def create_path(absolute_path: Path | str) -> bool:
@@ -61,6 +45,22 @@ def create_path(absolute_path: Path | str) -> bool:
     if absolute_path.suffix:
         absolute_path = absolute_path.parent
 
+    if is_exists(absolute_path):
+        logger.info(f"folder has already exist at: {absolute_path}")
+        return False
     absolute_path.mkdir(parents=True, exist_ok=True)
     logger.info(f"folder has been created at: {absolute_path}")
     return True
+
+
+def is_exists(path: str | Path) -> bool:
+    """
+    Check if the path does exists.
+
+    Args:
+        path (str | Path) : path to check
+
+    Returns:
+        bool : status
+    """
+    return os.path.exists(path)

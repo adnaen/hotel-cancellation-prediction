@@ -1,23 +1,24 @@
 from src.entity import DataIngestionConfig, DataTransformationConfig
 from src.utils import get_config
-from .paths import BasePaths
+from src.config import BasePaths
 
 
 class ConfigControl:
-    def __init__(self) -> None:
-        self.config = get_config(yaml_path=BasePaths.resolve("config/config.yml"))
-        self.schema = get_config(yaml_path=BasePaths.resolve("config/schema.yml"))
+    config = get_config(yaml_path=BasePaths.resolve("config/stages.yml"))
+    schema = get_config(yaml_path=BasePaths.resolve("config/schema.yml"))
 
-    def data_ingestion_config(self) -> DataIngestionConfig:
-        data_ingestion = self.config["data_ingestion"]
+    @classmethod
+    def data_ingestion_config(cls) -> DataIngestionConfig:
+        data_ingestion = cls.config["data_ingestion"]
         config = DataIngestionConfig(
-            source_url=data_ingestion["source_utl"],
+            source_url=data_ingestion["source_url"],
             download_path=data_ingestion["download_path"],
         )
         return config
 
-    def data_transform_config(self) -> DataTransformationConfig:
-        data_transform = self.config["data_transform"]
+    @classmethod
+    def data_transform_config(cls) -> DataTransformationConfig:
+        data_transform = cls.config["data_transform"]
         config = DataTransformationConfig(
             input_path=data_transform["input_path"],
             x_output_path=data_transform["x_output_path"],
@@ -27,8 +28,8 @@ class ConfigControl:
             missing_values=data_transform["missing_values"],
             outlier_columns=data_transform["outlier_columns"],
             encodings=data_transform["encodings"],
-            target_variable=self.schema["target_variable"],
-            numerical_cols=self.schema["numerical_columns"],
-            categorical_cols=self.schema["categorical_columns"],
+            target_variable=cls.schema["target_variable"],
+            numerical_cols=cls.schema["numerical_columns"],
+            categorical_cols=cls.schema["categorical_columns"],
         )
         return config

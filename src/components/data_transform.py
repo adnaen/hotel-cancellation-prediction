@@ -8,6 +8,7 @@ from src.utils.transformers import (
     OutlierTransformer,
     FeatureEngineeringTransformer,
 )
+from src.utils import create_path
 from src.config import logger
 
 
@@ -35,7 +36,7 @@ class DataTransform:
         dtype_column_map = self.config.dtype_convertion
         columns_to_drop = self.config.columns_to_drop
 
-        self.X = self.df.drop(columns=[self.config.target_variable])
+        self.X = self.df.drop(columns=list(self.config.target_variable))
         self.Y = self.df[self.config.target_variable]
 
         preprocessing_pipeline = Pipeline(
@@ -63,6 +64,8 @@ class DataTransform:
 
             preprocessed_data = preprocessing_pipeline.fit_transform(self.X)
             new_x = pd.DataFrame(preprocessed_data)
+            print(new_x.columns)
+            create_path(self.config.x_output_path)
             new_x.to_csv(self.config.x_output_path, index=False)
             self.Y.to_csv(self.config.y_output_path, index=False)
 

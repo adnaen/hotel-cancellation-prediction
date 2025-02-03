@@ -33,4 +33,4 @@ categorical_columns:
   - reservation_status_date
 
 target_variable:
-  - is_caneled
+  - is_canceled
