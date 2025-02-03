@@ -8,19 +8,14 @@ class InitialCleaningTransformer(BaseEstimator, TransformerMixin):
         self,
         columns_map: dict[str, str],
         columns_to_drop: list[str],
-        apply_cleaning: bool = True,
     ) -> None:
         self.columns_map = columns_map
-        self.apply_cleaning = apply_cleaning
         self.columns_to_drop = columns_to_drop
 
     def fit(self, X, y=None) -> "InitialCleaningTransformer":
         return self
 
     def transform(self, X) -> pd.DataFrame:
-        if not self.apply_cleaning:
-            return X
-
         try:
             df = X.copy()
             logger.info(f"df shape in {__class__.__name__} is : {df.shape}")
@@ -32,6 +27,7 @@ class InitialCleaningTransformer(BaseEstimator, TransformerMixin):
             return df
         except Exception as e:
             logger.error(f"error occured in {__class__.__name__}, as {e}")
+            raise e
 
     def __convert_dtypes(self, df: pd.DataFrame) -> pd.DataFrame:
         df_cp = df.copy(deep=True)

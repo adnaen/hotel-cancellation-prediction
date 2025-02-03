@@ -9,11 +9,9 @@ class HandleMissingValuesTransformer(BaseEstimator, TransformerMixin):
         self,
         num_stratergy: str = "mean",
         cat_stratergy: str = "most_frequent",
-        apply_cleaning: bool = True,
     ) -> None:
         self.num_imputer = SimpleImputer(strategy=num_stratergy)
         self.cat_imputer = SimpleImputer(strategy=cat_stratergy)
-        self.apply_cleaning = apply_cleaning
 
     def fit(self, X, y=None) -> "HandleMissingValuesTransformer":
         self.numerical_cols = X.select_dtypes("number").columns
@@ -24,8 +22,6 @@ class HandleMissingValuesTransformer(BaseEstimator, TransformerMixin):
 
     def transform(self, X) -> pd.DataFrame:
         try:
-            if not self.apply_cleaning:
-                return pd.DataFrame(X)
             df_cp = X.copy()
             df_cp[self.numerical_cols] = self.num_imputer.transform(
                 df_cp[self.numerical_cols]
@@ -38,3 +34,4 @@ class HandleMissingValuesTransformer(BaseEstimator, TransformerMixin):
 
         except Exception as e:
             print(f"error occured in {__class__.__name__}, as {e}")
+            raise e

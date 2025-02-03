@@ -17,15 +17,19 @@ class OutlierTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-        df = X.copy()
-        match self.stratergy:
-            case "iqr":
-                result_df = self.__iqr_method(X=df)
-                return result_df
+        try:
+            df = X.copy()
+            match self.stratergy:
+                case "iqr":
+                    result_df = self.__iqr_method(X=df)
+                    return result_df
 
-            case "log":
-                result_df = self.__log_method(X=df)
-                return result_df
+                case "log":
+                    result_df = self.__log_method(X=df)
+                    return result_df
+        except Exception as e:
+            print(f"error occured in {__class__.__name__}, as {e}")
+            raise e
 
     def __log_method(self, X: pd.DataFrame) -> pd.DataFrame:
         try:
@@ -47,6 +51,7 @@ class OutlierTransformer(BaseEstimator, TransformerMixin):
             return df
         except Exception as e:
             logger.error(f"error occured in {__class__.__name__}, as {e}")
+            raise e
 
     def __iqr_method(self, X: pd.DataFrame, threshold: float = 1.5) -> pd.DataFrame:
         try:
@@ -67,3 +72,4 @@ class OutlierTransformer(BaseEstimator, TransformerMixin):
             return pd.DataFrame(df)
         except Exception as e:
             logger.error(f"error occured in {__class__.__name__}, as {e}")
+            raise e
