@@ -4,7 +4,7 @@ data_ingestion:
 
 data_transform:
   input_path: "artifacts/data_ingestion/hotel_cancellation.csv"
-  x_output_path: "artifacts/data_transform/X_transformed.csv"
+  x_output_path: "artifacts/data_transform/X.csv"
   y_output_path: "artifacts/data_transform/Y.csv"
 
   columns_to_drop:

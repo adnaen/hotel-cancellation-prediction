@@ -36,9 +36,6 @@ class DataTransform:
         dtype_column_map = self.config.dtype_convertion
         columns_to_drop = self.config.columns_to_drop
 
-        self.X = self.df.drop(columns=list(self.config.target_variable))
-        self.Y = self.df[self.config.target_variable]
-
         preprocessing_pipeline = Pipeline(
             steps=[
                 (
@@ -62,12 +59,14 @@ class DataTransform:
 
         try:
 
-            preprocessed_data = preprocessing_pipeline.fit_transform(self.X)
+            preprocessed_data = preprocessing_pipeline.fit_transform(self.df)
             new_x = pd.DataFrame(preprocessed_data)
             print(new_x.columns)
             create_path(self.config.x_output_path)
-            new_x.to_csv(self.config.x_output_path, index=False)
-            self.Y.to_csv(self.config.y_output_path, index=False)
+            x = new_x.drop(columns=self.config.target_variable)
+            y = new_x[self.config.target_variable].astype("int")
+            x.to_csv(self.config.x_output_path, index=False)
+            y.to_csv(self.config.y_output_path, index=False)
 
         except Exception as e:
             logger.error(

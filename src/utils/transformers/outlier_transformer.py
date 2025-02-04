@@ -27,6 +27,8 @@ class OutlierTransformer(BaseEstimator, TransformerMixin):
                 case "log":
                     result_df = self.__log_method(X=df)
                     return result_df
+                case _:
+                    return df
         except Exception as e:
             print(f"error occured in {__class__.__name__}, as {e}")
             raise e

@@ -1,8 +1,9 @@
 from typing import Any
 from src.pipeline import DataIngestionPipeline, DataTransformPipeline
+from src.config import logger
 
 
-def run_pipeline(pipeline: Any) -> None:
+def run_pipeline(pipeline: Any, stage: str) -> None:
     """
     run pipeline
 
@@ -12,9 +13,14 @@ def run_pipeline(pipeline: Any) -> None:
     Returns:
         None
     """
+    logger.info(
+        f"\n{'*' * 100}\n{' ' * 40}STAGE {stage} STARTED{' ' * 40}\n{'*' * 100}"
+    )
     pipeline.run()
+
+    logger.info(f"\n{'*' * 100}\n{' ' * 40}STAGE {stage} END{' ' * 40}\n{'*' * 100}")
 
 
 if __name__ == "__main__":
-    run_pipeline(DataIngestionPipeline())
-    run_pipeline(DataTransformPipeline())
+    run_pipeline(DataIngestionPipeline(), stage="Data Ingestion")
+    run_pipeline(DataTransformPipeline(), stage="Data Transform")
