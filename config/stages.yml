@@ -50,10 +50,10 @@ data_transform:
       - country
 
 data_validation:
-  input_path: "artifacts/data_cleaning/transformed.csv"
-  no_of_columns: 31
-  dtype_counts:
-    integer: 15
-    float: 4
+  input_path: "artifacts/data_transform/X.csv"
+  dtypes:
+    number: 23
     object: 11
-    datetime: 1
+  shape:
+    rows: 48050
+    columns: 34

@@ -17,9 +17,7 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
             logger.info(f"df shape in {__class__.__name__} is : {df.shape}")
             df["reservation_status_year"] = df["reservation_status_date"].dt.year
             df["reservation_status_month"] = df["reservation_status_date"].dt.month
-            df["reservation_status_day_of_month"] = df[
-                "reservation_status_date"
-            ].dt.date
+            df["reservation_status_day_of_month"] = df["reservation_status_date"].dt.day
             df["reservation_status_weekday"] = df["reservation_status_date"].dt.weekday
             df["reservation_status_is_weekend"] = (
                 df["reservation_status_date"]
@@ -27,6 +25,7 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
                 .astype("int")
             )
             df = df.drop(columns=["reservation_status_date"])
+            print(df.dtypes)
             logger.info(f"df shape after complte {__class__.__name__} is : {df.shape}")
             return df
         except Exception as e:

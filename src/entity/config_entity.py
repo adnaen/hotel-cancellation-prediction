@@ -30,5 +30,5 @@ class DataTransformationConfig:
 @dataclass
 class DataValidationConfig:
     input_path: Path
-    no_of_columns: int
-    dtype_counts: dict[str, int]
+    dtypes: dict[str, int]
+    shape: dict[str, int]

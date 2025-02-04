@@ -1,4 +1,8 @@
-from src.entity import DataIngestionConfig, DataTransformationConfig
+from src.entity import (
+    DataIngestionConfig,
+    DataTransformationConfig,
+    DataValidationConfig,
+)
 from src.utils import get_config
 from src.config import BasePaths
 
@@ -31,5 +35,15 @@ class ConfigControl:
             target_variable=cls.schema["target_variable"],
             numerical_cols=cls.schema["numerical_columns"],
             categorical_cols=cls.schema["categorical_columns"],
+        )
+        return config
+
+    @classmethod
+    def data_validation_config(cls) -> DataValidationConfig:
+        data_validation = cls.config["data_validation"]
+        config = DataValidationConfig(
+            input_path=data_validation["input_path"],
+            dtypes=data_validation["dtypes"],
+            shape=data_validation["shape"],
         )
         return config

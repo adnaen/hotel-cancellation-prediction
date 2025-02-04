@@ -1,5 +1,9 @@
 from typing import Any
-from src.pipeline import DataIngestionPipeline, DataTransformPipeline
+from src.pipeline import (
+    DataIngestionPipeline,
+    DataTransformPipeline,
+    DataValidationPipeline,
+)
 from src.config import logger
 
 
@@ -24,3 +28,4 @@ def run_pipeline(pipeline: Any, stage: str) -> None:
 if __name__ == "__main__":
     run_pipeline(DataIngestionPipeline(), stage="Data Ingestion")
     run_pipeline(DataTransformPipeline(), stage="Data Transform")
+    run_pipeline(DataValidationPipeline(), stage="Data Validation")

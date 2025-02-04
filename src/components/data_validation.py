@@ -12,27 +12,32 @@ class DataValidation:
             config (DataValidationConfig) : configuration for DataValidation
         """
         self.config = config
-        self.df = load_csv(
-            path=self.config.input_path, parse_dates=["reservation_status_date"]
-        )
+        self.df = load_csv(path=self.config.input_path)
 
     def structural_validation(self) -> bool:
         """
         check for
-        -> column types
-        -> no.of columns
+        -> dtype counts
+        -> dataset shape
         """
-        is_dtype_valid = check_dtypes(
-            df=self.df, base_type_counts=self.config.dtype_counts
+        dtype_number_count = (
+            len(self.df.select_dtypes("number")) == self.config.dtypes["number"]
         )
-        is_no_of_columns_equal = (
-            True if self.config.no_of_columns == len(self.df.columns) else False
+        dtype_object_count = (
+            len(self.df.select_dtypes("object")) == self.config.dtypes["object"]
         )
-        if all((is_dtype_valid, is_no_of_columns_equal)):
-            logger.info("Structural validation complted with no errors!")
+        is_shape = self.df.shape == (
+            self.config.shape["columns"],
+            self.config.shape["rows"],
+        )
+
+        if all((dtype_object_count, dtype_number_count, is_shape)):
+            logger.info("Dataset Structure validation complted with no errors!")
             return True
         else:
-            logger.error("Error in structural validation function")
+            logger.error(
+                "Error in dataset structure validation, something not work as excepted"
+            )
             return False
 
     def integrity_validation(self) -> bool:
@@ -41,9 +46,9 @@ class DataValidation:
         -> missing values
         -> duplicate values
         """
-        have_missing_Values = is_empty_missing_values(df=self.df)
+        have_missing_values = self.df.isna().sum().any() == False
         have_duplicate = any(self.df.duplicated())
-        if any((have_missing_Values, have_duplicate)):
+        if any((have_missing_values, have_duplicate)):
             logger.error(
                 "have duplicate or missing values, cannot proceed with integrity_validation"
             )
