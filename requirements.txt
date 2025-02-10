@@ -1,6 +1,8 @@
 scikit-learn
+xgboost
 gdown
 pandas
 numpy
 matplotlib
 pyyaml
+category_encoders

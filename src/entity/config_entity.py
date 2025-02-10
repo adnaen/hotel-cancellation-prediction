@@ -38,5 +38,6 @@ class DataValidationConfig:
 
 @dataclass
 class ModelTrainingConfig:
-    input_path: Path
+    x_train_inutput_path: Path
+    y_train_inutput_path: Path
     encodings: dict[str, list]
