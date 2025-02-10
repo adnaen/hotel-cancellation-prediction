@@ -4,8 +4,10 @@ data_ingestion:
 
 data_transform:
   input_path: "artifacts/data_ingestion/hotel_cancellation.csv"
-  x_output_path: "artifacts/data_transform/X.csv"
-  y_output_path: "artifacts/data_transform/Y.csv"
+  x_train_output_path: "artifacts/data_transform/x_train.csv"
+  x_test_output_path: "artifacts/data_transform/x_test.csv"
+  y_train_output_path: "artifacts/data_transform/y_train.csv"
+  y_test_output_path: "artifacts/data_transform/y_test.csv"
 
   columns_to_drop:
     - email
@@ -34,21 +36,6 @@ data_transform:
       - agent
       - adr
 
-  encodings:
-    LabelEncoder:
-      - hotel
-      - arrival_date_month
-      - meal
-      - market_segment
-      - distribution_channel
-      - reserved_room_type
-      - assigned_room_type
-      - reservation_status
-      - customer_type
-      - deposit_type
-    TargetEncoder:
-      - country
-
 data_validation:
   input_path: "artifacts/data_transform/X.csv"
   dtypes:
@@ -57,3 +44,21 @@ data_validation:
   shape:
     rows: 48050
     columns: 34
+
+model_training:
+  encodings:
+    ordinal_encoder:
+      - hotel
+      - meal
+      - distribution_channel
+      - deposit_type
+      - customer_type
+      - reservation_status
+    count_encoder:
+      - country
+    target_encoder:
+      - assigned_room_type
+      - reserved_room_type
+      - market_segment
+      - arrival_date_month
+

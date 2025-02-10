@@ -15,8 +15,10 @@ class DataIngestionConfig:
 @dataclass
 class DataTransformationConfig:
     input_path: Path
-    x_output_path: Path
-    y_output_path: Path
+    x_train_output_path: Path
+    x_test_output_path: Path
+    y_train_output_path: Path
+    y_test_output_path: Path
     columns_to_drop: list[str]
     dtype_convertion: dict[str, str]
     missing_values: dict[str, str | list[str]]
@@ -32,3 +34,9 @@ class DataValidationConfig:
     input_path: Path
     dtypes: dict[str, int]
     shape: dict[str, int]
+
+
+@dataclass
+class ModelTrainingConfig:
+    input_path: Path
+    encodings: dict[str, list]

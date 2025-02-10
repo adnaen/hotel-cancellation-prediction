@@ -25,8 +25,10 @@ class ConfigControl:
         data_transform = cls.config["data_transform"]
         config = DataTransformationConfig(
             input_path=data_transform["input_path"],
-            x_output_path=data_transform["x_output_path"],
-            y_output_path=data_transform["y_output_path"],
+            x_train_output_path=data_transform["x_train_output_path"],
+            x_test_output_path=data_transform["x_test_output_path"],
+            y_train_output_path=data_transform["y_train_output_path"],
+            y_test_output_path=data_transform["y_test_output_path"],
             columns_to_drop=data_transform["columns_to_drop"],
             dtype_convertion=data_transform["dtype_convertion"],
             missing_values=data_transform["missing_values"],
