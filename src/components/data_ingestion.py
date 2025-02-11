@@ -15,7 +15,7 @@ class DataIngestion:
 
     def download_raw_data(self) -> bool:
         """
-        Download thin
+        download raw dataset from google drive.
 
         Returns:
             bool: status

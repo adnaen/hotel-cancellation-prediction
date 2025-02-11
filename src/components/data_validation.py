@@ -20,24 +20,11 @@ class DataValidation:
         -> dtype counts
         -> dataset shape
         """
-        dtype_number_count = (
-            len(self.df.select_dtypes("number")) == self.config.dtypes["number"]
-        )
-        dtype_object_count = (
-            len(self.df.select_dtypes("object")) == self.config.dtypes["object"]
-        )
-        is_shape = self.df.shape == (
-            self.config.shape["columns"],
-            self.config.shape["rows"],
-        )
-
-        if all((dtype_object_count, dtype_number_count, is_shape)):
+        if all((self.__check_shape(), self.__check_dtype())):
             logger.info("Dataset Structure validation complted with no errors!")
             return True
         else:
-            logger.error(
-                "Error in dataset structure validation, something not work as excepted"
-            )
+            logger.error("Error in dataset structure validation")
             return False
 
     def integrity_validation(self) -> bool:
@@ -50,8 +37,9 @@ class DataValidation:
         have_duplicate = any(self.df.duplicated())
         if any((have_missing_values, have_duplicate)):
             logger.error(
-                "have duplicate or missing values, cannot proceed with integrity_validation"
+                f"expected 0 missing values and 0 duplidated values, but got NaN values: {self.df.isna().sum()}, Duplicates: {self.df[self.df.duplicated()].shape[0]}"
             )
+            print(self.df[self.df.duplicated()])
             return False
         return True
 
@@ -64,3 +52,28 @@ class DataValidation:
         else:
             logger.error("SOME MISS BEHAVE OCCURED WHILE DATA VALIDATION")
             return False
+
+    def __check_shape(self) -> bool:
+        status = self.df.shape == (
+            self.config.shape["rows"],
+            self.config.shape["columns"],
+        )
+        if not status:
+            raise Exception(
+                f"expected df shape is : {self.df.shape}, got intead : {self.config.shape}"
+            )
+        return True
+
+    def __check_dtype(self) -> bool:
+        object_status = (
+            len(self.df.select_dtypes("object").columns) == self.config.dtypes["object"]
+        )
+
+        number_status = (
+            len(self.df.select_dtypes("number").columns) == self.config.dtypes["number"]
+        )
+        if not object_status or not number_status:
+            raise Exception(
+                f"expected dtype ratio, numeric : {self.config.dtypes['number']}, object : {self.config.dtypes['object']}, got intead : numeric: {len(self.df.select_dtypes('number').columns)} object : {len(self.df.select_dtypes('object').columns)}"
+            )
+        return True

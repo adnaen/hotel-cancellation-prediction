@@ -1,7 +1,8 @@
 from src.entity import (
     DataIngestionConfig,
-    DataTransformationConfig,
+    DataCleaningConfig,
     DataValidationConfig,
+    DataPreprocessingConfig,
 )
 from src.utils import get_config
 from src.config import BasePaths
@@ -21,22 +22,17 @@ class ConfigControl:
         return config
 
     @classmethod
-    def data_transform_config(cls) -> DataTransformationConfig:
-        data_transform = cls.config["data_transform"]
-        config = DataTransformationConfig(
+    def data_cleaning_config(cls) -> DataCleaningConfig:
+        data_transform = cls.config["data_cleaning"]
+        config = DataCleaningConfig(
             input_path=data_transform["input_path"],
-            x_train_output_path=data_transform["x_train_output_path"],
-            x_test_output_path=data_transform["x_test_output_path"],
-            y_train_output_path=data_transform["y_train_output_path"],
-            y_test_output_path=data_transform["y_test_output_path"],
+            x_output_path=data_transform["x_output_path"],
+            y_output_path=data_transform["y_output_path"],
             columns_to_drop=data_transform["columns_to_drop"],
             dtype_convertion=data_transform["dtype_convertion"],
             missing_values=data_transform["missing_values"],
             outlier_columns=data_transform["outlier_columns"],
-            encodings=data_transform["encodings"],
             target_variable=cls.schema["target_variable"],
-            numerical_cols=cls.schema["numerical_columns"],
-            categorical_cols=cls.schema["categorical_columns"],
         )
         return config
 
@@ -47,5 +43,18 @@ class ConfigControl:
             input_path=data_validation["input_path"],
             dtypes=data_validation["dtypes"],
             shape=data_validation["shape"],
+        )
+        return config
+
+    @classmethod
+    def data_preprocessing_config(cls) -> DataPreprocessingConfig:
+        data_preprocessing = cls.config["data_preprocessing"]
+        config = DataPreprocessingConfig(
+            x_input_path=data_preprocessing["x_input_path"],
+            y_input_path=data_preprocessing["y_input_path"],
+            encodings=data_preprocessing["encodings"],
+            numerical_features=cls.schema["numerical_columns"],
+            x_output_path=data_preprocessing["x_output_path"],
+            pipeline_path=data_preprocessing["pipeline_path"],
         )
         return config

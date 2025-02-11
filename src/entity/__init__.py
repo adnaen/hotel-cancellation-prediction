@@ -1,6 +1,6 @@
 from .config_entity import (
     DataIngestionConfig,
+    DataCleaningConfig,
     DataValidationConfig,
-    DataTransformationConfig,
-    ModelTrainingConfig,
+    DataPreprocessingConfig,
 )

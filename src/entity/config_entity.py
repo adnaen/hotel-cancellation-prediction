@@ -1,10 +1,6 @@
 from pathlib import Path
 from dataclasses import dataclass
 
-#
-# Data schema for Pipeline Configuration
-#
-
 
 @dataclass
 class DataIngestionConfig:
@@ -13,20 +9,15 @@ class DataIngestionConfig:
 
 
 @dataclass
-class DataTransformationConfig:
+class DataCleaningConfig:
     input_path: Path
-    x_train_output_path: Path
-    x_test_output_path: Path
-    y_train_output_path: Path
-    y_test_output_path: Path
+    x_output_path: Path
+    y_output_path: Path
     columns_to_drop: list[str]
     dtype_convertion: dict[str, str]
     missing_values: dict[str, str | list[str]]
     outlier_columns: dict[str, str | list[str]]
-    encodings: dict[str, list[str]]
     target_variable: str
-    numerical_cols: list[str]
-    categorical_cols: list[str]
 
 
 @dataclass
@@ -37,7 +28,10 @@ class DataValidationConfig:
 
 
 @dataclass
-class ModelTrainingConfig:
-    x_train_inutput_path: Path
-    y_train_inutput_path: Path
+class DataPreprocessingConfig:
+    x_input_path: Path
+    y_input_path: Path
     encodings: dict[str, list]
+    numerical_features: list[str]
+    x_output_path: Path
+    pipeline_path: Path

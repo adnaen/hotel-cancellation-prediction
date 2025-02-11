@@ -1,25 +1,25 @@
 from src.config import logger
-from src.components import DataTransform
+from src.components import DataCleaning
 from src.utils import ConfigControl
 
-STAGE = "DataTransform"
+STAGE = "DataCleaning"
 
 
-class DataTransformPipeline:
+class DataCleaningPipeline:
     def __init__(self) -> None:
         """
         Initializing DataIngestionPipeline class.
         """
-        self.config = ConfigControl.data_transform_config()
-        self.pipeline = DataTransform(config=self.config)
+        self.config = ConfigControl.data_cleaning_config()
+        self.pipeline = DataCleaning(config=self.config)
 
     def run(self) -> bool:
-        status = self.pipeline.transform()
+        status = self.pipeline.clean()
         return True if status else False
 
 
 if __name__ == "__main__":
     logger.info(f">>> STAGE {STAGE} STARGED <<<<")
-    data_transform_pipeline = DataTransformPipeline()
+    data_transform_pipeline = DataCleaningPipeline()
     data_transform_pipeline.run()
     logger.info(f">>> STAGE {STAGE} END <<<<")

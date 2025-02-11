@@ -2,11 +2,11 @@ import joblib
 from typing import Any
 from pathlib import Path
 
-from src.config import logger
+from src.config import logger, BasePaths
 from src.utils import is_exists
 
 
-def dump_joblib(path: Path, data: Any) -> bool:
+def dump_joblib(path: str | Path, data: Any) -> bool:
     """
     save joblib file to specific path.
 
@@ -18,10 +18,13 @@ def dump_joblib(path: Path, data: Any) -> bool:
         bool : status
     """
     try:
+        abs_path: Path = BasePaths.resolve(path)
         if is_exists(path):
-            logger.info(f"{path.name} joblic file already exist on {path}!")
+            logger.info(f"{abs_path.name} joblic file already exist on {abs_path}!")
         joblib.dump(filename=path, value=data)
-        logger.info(f"{path.name} Joblib file has been saved on {path} successfully!")
+        logger.info(
+            f"{abs_path.name} Joblib file has been saved on {abs_path} successfully!"
+        )
         return True
     except Exception as e:
         logger.error("error occured in dump joblib function", e)

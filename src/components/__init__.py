@@ -1,3 +1,4 @@
 from .data_ingestion import DataIngestion
+from .data_cleaning import DataCleaning
 from .data_validation import DataValidation
-from .data_transform import DataTransform
+from .data_preprocessing import DataPreprocessing

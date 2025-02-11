@@ -1,13 +1,11 @@
 data_ingestion:
   source_url: "https://drive.google.com/uc?id=14cOM7gDRkhIo7qye4lI_9MK02vDAkqqU"
-  download_path: "artifacts/data_ingestion/hotel_cancellation.csv"
+  download_path: "artifacts/ingested/hotel_cancellation.csv"
 
-data_transform:
-  input_path: "artifacts/data_ingestion/hotel_cancellation.csv"
-  x_train_output_path: "artifacts/data_transform/x_train.csv"
-  x_test_output_path: "artifacts/data_transform/x_test.csv"
-  y_train_output_path: "artifacts/data_transform/y_train.csv"
-  y_test_output_path: "artifacts/data_transform/y_test.csv"
+data_cleaning:
+  input_path: "artifacts/ingested/hotel_cancellation.csv"
+  x_output_path: "artifacts/cleaned/X.csv"
+  y_output_path: "artifacts/cleaned/Y.csv"
 
   columns_to_drop:
     - email
@@ -37,7 +35,7 @@ data_transform:
       - adr
 
 data_validation:
-  input_path: "artifacts/data_transform/X.csv"
+  input_path: "artifacts/cleaned/X.csv"
   dtypes:
     number: 23
     object: 11
@@ -45,7 +43,9 @@ data_validation:
     rows: 48050
     columns: 34
 
-model_training:
+data_preprocessing:
+  x_input_path: "artifacts/cleaned/X.csv"
+  y_input_path: "artifacts/cleaned/Y.csv"
   encodings:
     ordinal_encoder:
       - hotel
@@ -61,4 +61,5 @@ model_training:
       - reserved_room_type
       - market_segment
       - arrival_date_month
-
+  x_output_path: "artifacts/preprocessed/X.csv"
+  pipeline_path: "artifacts/preprocessed/preprocessor.joblib"
