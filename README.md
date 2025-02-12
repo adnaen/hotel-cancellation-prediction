@@ -4,7 +4,7 @@ A **machine learning** project that predicts whether a hotel booking will be can
 
 >status: Under Development 
 
-Run Application
+To Run Application
 ```bash
 python -m src.run
 ```
