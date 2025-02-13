@@ -1,11 +1,10 @@
 data_ingestion:
   source_url: "https://drive.google.com/uc?id=14cOM7gDRkhIo7qye4lI_9MK02vDAkqqU"
-  download_path: "artifacts/ingested/hotel_cancellation.csv"
+  download_path: "artifacts/data_ingestion/hotel_cancellation.csv"
 
 data_cleaning:
-  input_path: "artifacts/ingested/hotel_cancellation.csv"
-  x_output_path: "artifacts/cleaned/X.csv"
-  y_output_path: "artifacts/cleaned/Y.csv"
+  input_path: "artifacts/data_ingestion/hotel_cancellation.csv"
+  df_output_path: "artifacts/data_cleaning/cleaned.csv"
 
   columns_to_drop:
     - email
@@ -13,11 +12,12 @@ data_cleaning:
     - credit_card
     - name
     - company
+    - reservation_status_date
+    - reservation_status
 
   dtype_convertion:
     children: int64
     agent: int64
-    reservation_status_date: datetime64[ms]
 
   missing_values:
     categorical:
@@ -35,17 +35,17 @@ data_cleaning:
       - adr
 
 data_validation:
-  input_path: "artifacts/cleaned/X.csv"
+  input_path: "artifacts/data_cleaning/cleaned.csv"
   dtypes:
-    number: 23
-    object: 11
+    number: 19
+    object: 10
   shape:
-    rows: 48050
-    columns: 34
+    rows: 48047
+    columns: 30
+  classes: 2
 
 data_preprocessing:
-  x_input_path: "artifacts/cleaned/X.csv"
-  y_input_path: "artifacts/cleaned/Y.csv"
+  df_input_path: "artifacts/data_cleaning/cleaned.csv"
   encodings:
     ordinal_encoder:
       - hotel
@@ -53,13 +53,17 @@ data_preprocessing:
       - distribution_channel
       - deposit_type
       - customer_type
-      - reservation_status
     count_encoder:
       - country
-    target_encoder:
       - assigned_room_type
       - reserved_room_type
       - market_segment
       - arrival_date_month
-  x_output_path: "artifacts/preprocessed/X.csv"
-  pipeline_path: "artifacts/preprocessed/preprocessor.joblib"
+  train_output_path: "artifacts/data_preprocessing/train.csv"
+  test_output_path: "artifacts/data_preprocessing/test.csv"
+  pipeline_path: "artifacts/data_preprocessing/preprocessor.joblib"
+
+model_selection:
+  train_input_path: "artifacts/data_preprocessing/train.csv"
+  best_model_info_path: "artifacts/model_selection/best_model.json"
+

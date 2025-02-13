@@ -4,6 +4,7 @@ from src.entity import (
     DataValidationConfig,
     DataPreprocessingConfig,
 )
+from src.entity.config_entity import ModelSelectionConfig
 from src.utils import get_config
 from src.config import BasePaths
 
@@ -11,6 +12,7 @@ from src.config import BasePaths
 class ConfigControl:
     config = get_config(yaml_path=BasePaths.resolve("config/stages.yml"))
     schema = get_config(yaml_path=BasePaths.resolve("config/schema.yml"))
+    params = get_config(yaml_path=BasePaths.resolve("config/params.yml"))
 
     @classmethod
     def data_ingestion_config(cls) -> DataIngestionConfig:
@@ -26,13 +28,11 @@ class ConfigControl:
         data_transform = cls.config["data_cleaning"]
         config = DataCleaningConfig(
             input_path=data_transform["input_path"],
-            x_output_path=data_transform["x_output_path"],
-            y_output_path=data_transform["y_output_path"],
+            df_output_path=data_transform["df_output_path"],
             columns_to_drop=data_transform["columns_to_drop"],
             dtype_convertion=data_transform["dtype_convertion"],
             missing_values=data_transform["missing_values"],
             outlier_columns=data_transform["outlier_columns"],
-            target_variable=cls.schema["target_variable"],
         )
         return config
 
@@ -50,11 +50,21 @@ class ConfigControl:
     def data_preprocessing_config(cls) -> DataPreprocessingConfig:
         data_preprocessing = cls.config["data_preprocessing"]
         config = DataPreprocessingConfig(
-            x_input_path=data_preprocessing["x_input_path"],
-            y_input_path=data_preprocessing["y_input_path"],
+            df_input_path=data_preprocessing["df_input_path"],
             encodings=data_preprocessing["encodings"],
             numerical_features=cls.schema["numerical_columns"],
-            x_output_path=data_preprocessing["x_output_path"],
+            train_output_path=data_preprocessing["train_output_path"],
+            test_output_path=data_preprocessing["test_output_path"],
             pipeline_path=data_preprocessing["pipeline_path"],
+        )
+        return config
+
+    @classmethod
+    def model_selection_config(cls) -> ModelSelectionConfig:
+        model_selection = cls.config["model_selection"]
+        config = ModelSelectionConfig(
+            train_input_path=model_selection["train_input_path"],
+            params=cls.params,
+            best_model_info_path=model_selection["best_model_info_path"],
         )
         return config

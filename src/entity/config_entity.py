@@ -38,3 +38,5 @@ class DataPreprocessingConfig:
 @dataclass
 class ModelSelectionConfig:
     train_input_path: Path
+    params: dict
+    best_model_info_path: Path
