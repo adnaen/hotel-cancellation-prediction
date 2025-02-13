@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.impute import SimpleImputer
 
+from src.config import logger
+
 
 class HandleMissingValuesTransformer(BaseEstimator, TransformerMixin):
 
@@ -22,15 +24,16 @@ class HandleMissingValuesTransformer(BaseEstimator, TransformerMixin):
 
     def transform(self, X) -> pd.DataFrame:
         try:
-            df_cp = X.copy()
-            df_cp[self.numerical_cols] = self.num_imputer.transform(
-                df_cp[self.numerical_cols]
+            df = X.copy()
+            df[self.numerical_cols] = self.num_imputer.transform(
+                df[self.numerical_cols]
             )
-            df_cp[self.categorical_cols] = self.cat_imputer.transform(
-                df_cp[self.categorical_cols]
+            df[self.categorical_cols] = self.cat_imputer.transform(
+                df[self.categorical_cols]
             )
-
-            return pd.DataFrame(df_cp, columns=X.columns)
+            df = df.drop_duplicates()
+            logger.info(f"df shape after complete {__class__.__name__} is : {df.shape}")
+            return pd.DataFrame(df, columns=X.columns)
 
         except Exception as e:
             print(f"error occured in {__class__.__name__}, as {e}")

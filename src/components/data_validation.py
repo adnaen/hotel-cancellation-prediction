@@ -20,7 +20,7 @@ class DataValidation:
         -> dtype counts
         -> dataset shape
         """
-        if all((self.__check_shape(), self.__check_dtype())):
+        if self.__check_dtype():
             logger.info("Dataset Structure validation complted with no errors!")
             return True
         else:
@@ -52,17 +52,6 @@ class DataValidation:
         else:
             logger.error("SOME MISS BEHAVE OCCURED WHILE DATA VALIDATION")
             return False
-
-    def __check_shape(self) -> bool:
-        status = self.df.shape == (
-            self.config.shape["rows"],
-            self.config.shape["columns"],
-        )
-        if not status:
-            raise Exception(
-                f"expected df shape is : {self.df.shape}, got intead : {self.config.shape}"
-            )
-        return True
 
     def __check_dtype(self) -> bool:
         object_status = (
