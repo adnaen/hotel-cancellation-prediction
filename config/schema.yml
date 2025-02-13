@@ -29,8 +29,6 @@ categorical_columns:
   - assigned_room_type
   - deposit_type
   - customer_type
-  - reservation_status
-  - reservation_status_date
 
 target_variable:
   - is_canceled
