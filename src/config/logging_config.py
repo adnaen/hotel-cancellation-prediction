@@ -1,17 +1,18 @@
 import logging
 import sys
+from datetime import datetime
 
 from .paths import BasePaths
 
 
-file_path = BasePaths.PROJECT_DIR / "logs/app.log"
+# LOG_NAME = f"{datetime.now():%d_%m_%Y_%M_%H}.log"
+LOG_NAME = f"{datetime.now()}.log"
+file_path = BasePaths.PROJECT_DIR / f"logs/{LOG_NAME}"
 file_path.parent.mkdir(exist_ok=True, parents=True)
 file_path.touch(exist_ok=True)
 
 
-format = (
-    "%(asctime)s %(levelname)s from: %(filename)s at_line: %(lineno)d : %(message)s"
-)
+format = "%(asctime)s %(levelname)s %(filename)s %(message)s"
 
 logging.basicConfig(
     format=format,
