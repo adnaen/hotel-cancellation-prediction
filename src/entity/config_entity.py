@@ -11,13 +11,11 @@ class DataIngestionConfig:
 @dataclass
 class DataCleaningConfig:
     input_path: Path
-    x_output_path: Path
-    y_output_path: Path
+    df_output_path: Path
     columns_to_drop: list[str]
     dtype_convertion: dict[str, str]
     missing_values: dict[str, str | list[str]]
     outlier_columns: dict[str, str | list[str]]
-    target_variable: str
 
 
 @dataclass
@@ -29,9 +27,14 @@ class DataValidationConfig:
 
 @dataclass
 class DataPreprocessingConfig:
-    x_input_path: Path
-    y_input_path: Path
+    df_input_path: Path
     encodings: dict[str, list]
     numerical_features: list[str]
-    x_output_path: Path
+    test_output_path: Path
+    train_output_path: Path
     pipeline_path: Path
+
+
+@dataclass
+class ModelSelectionConfig:
+    train_input_path: Path

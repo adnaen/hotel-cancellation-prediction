@@ -1,8 +1,9 @@
 import pandas as pd
 from category_encoders import OrdinalEncoder, CountEncoder
-from sklearn.preprocessing import StandardScaler, TargetEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
 
 from src.entity import DataPreprocessingConfig
 from src.config import logger
@@ -23,8 +24,7 @@ class DataPreprocessing:
 
         """
         self.config = config
-        self.X = pd.read_csv(self.config.x_input_path)
-        self.Y = pd.read_csv(self.config.y_input_path)
+        self.df = pd.read_csv(self.config.df_input_path)
 
     def preprocessing(self) -> bool:
         """
@@ -37,7 +37,7 @@ class DataPreprocessing:
             None
 
         """
-        categorical_transformer = ColumnTransformer(
+        preprocessor = ColumnTransformer(
             transformers=[
                 (
                     "ordinal_encoder",
@@ -53,48 +53,45 @@ class DataPreprocessing:
                     "count_encoder",
                     Pipeline(
                         steps=[
-                            ("encoder", CountEncoder()),
+                            ("encoder", CountEncoder(handle_unknown=0)),
                             ("scaler", StandardScaler()),
                         ]
                     ),
                     self.config.encodings["count_encoder"],
                 ),
-                (
-                    "target_encoder",
-                    Pipeline(
-                        steps=[
-                            ("encoder", TargetEncoder()),
-                            ("scaler", StandardScaler()),
-                        ]
-                    ),
-                    self.config.encodings["target_encoder"],
-                ),
+                ("scaler", StandardScaler(), self.config.numerical_features),
             ],
             remainder="passthrough",
             verbose_feature_names_out=False,
             force_int_remainder_cols=False,
         )
 
-        numerical_transformer = ColumnTransformer(
-            transformers=[("scaler", StandardScaler(), self.config.numerical_features)],
-            remainder="passthrough",
-            verbose_feature_names_out=False,
-            force_int_remainder_cols=False,
-        )
-
-        preprocessor = Pipeline(
-            steps=[
-                ("categorical features", categorical_transformer),
-                ("numerical features", numerical_transformer),
-            ]
-        )
-
         try:
+
+            train, test = train_test_split(
+                self.df, test_size=0.2, random_state=2323, shuffle=True
+            )
+
+            train = pd.DataFrame(train)
+            test = pd.DataFrame(test)
+
+            x_train = train.drop(columns=["is_canceled"])
+            y_train = train["is_canceled"].astype("int16")
+
+            x_test = test.drop(columns=["is_canceled"])
+            y_test = test["is_canceled"].astype("int16")
+
             preprocessor.set_output(transform="pandas")
-            preprocessor.fit(self.X, self.Y)
-            preprocessed_x = preprocessor.transform(self.X)
-            create_path(self.config.x_output_path)
-            preprocessed_x.to_csv(self.config.x_output_path, index=False)
+            preprocessor.fit(x_train)
+            processed_train = preprocessor.transform(x_train)
+            processed_test = preprocessor.transform(x_test)
+            processed_train["is_canceled"] = y_train.values
+            processed_test["is_canceled"] = y_test.values
+
+            create_path(self.config.train_output_path)
+
+            processed_train.to_csv(self.config.train_output_path, index=False)
+            processed_test.to_csv(self.config.test_output_path, index=False)
             dump_joblib(path=self.config.pipeline_path, data=preprocessor)
             return True
 

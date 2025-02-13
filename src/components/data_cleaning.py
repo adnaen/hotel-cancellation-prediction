@@ -8,7 +8,6 @@ from src.utils.transformers import (
     InitialCleaningTransformer,
     HandleMissingValuesTransformer,
     OutlierTransformer,
-    FeatureEngineeringTransformer,
 )
 
 
@@ -23,9 +22,7 @@ class DataCleaning:
         """
 
         self.config = config
-        self.df = pd.read_csv(
-            self.config.input_path, parse_dates=["reservation_status_date"]
-        )
+        self.df = pd.read_csv(self.config.input_path)
 
     def clean(self) -> None:
         """
@@ -56,10 +53,6 @@ class DataCleaning:
                     "LOGOutlierTreatment",
                     OutlierTransformer(columns=log_columns, stratergy="log"),
                 ),
-                (
-                    "FeatureEngineering",
-                    FeatureEngineeringTransformer(),
-                ),
             ]
         )
 
@@ -69,14 +62,8 @@ class DataCleaning:
             logger.info(
                 f"Cleaned Df Stats\nCleaned x shape: {df.shape}\nMissing Values: {df.isna().sum()}\nDuplicates: {df[df.duplicated()].count()}"
             )
-            create_path(self.config.x_output_path)
-            df.drop(columns=self.config.target_variable).to_csv(
-                self.config.x_output_path, index=False
-            )
-            df[self.config.target_variable].astype("int").to_csv(
-                self.config.y_output_path, index=False
-            )
-
+            create_path(self.config.df_output_path)
+            df.to_csv(self.config.df_output_path, index=False)
         except Exception as e:
             logger.error(
                 f"Error occured in {__class__.__name__} while preprocessing pipeline :",
