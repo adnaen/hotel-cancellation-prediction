@@ -78,20 +78,15 @@ class DataPreprocessing:
             x_train = train.drop(columns=["is_canceled"])
             y_train = train["is_canceled"].astype("int16")
 
-            x_test = test.drop(columns=["is_canceled"])
-            y_test = test["is_canceled"].astype("int16")
-
             preprocessor.set_output(transform="pandas")
             preprocessor.fit(x_train)
             processed_train = preprocessor.transform(x_train)
-            processed_test = preprocessor.transform(x_test)
             processed_train["is_canceled"] = y_train.values
-            processed_test["is_canceled"] = y_test.values
 
             create_path(self.config.train_output_path)
 
             processed_train.to_csv(self.config.train_output_path, index=False)
-            processed_test.to_csv(self.config.test_output_path, index=False)
+            test.to_csv(self.config.test_output_path, index=False)
             dump_joblib(path=self.config.pipeline_path, data=preprocessor)
             return True
 
