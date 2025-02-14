@@ -4,4 +4,5 @@ from .config_entity import (
     DataValidationConfig,
     DataPreprocessingConfig,
     ModelSelectionConfig,
+    ModelTrainingConfig,
 )

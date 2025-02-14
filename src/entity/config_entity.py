@@ -40,3 +40,12 @@ class ModelSelectionConfig:
     train_input_path: Path
     params: dict
     best_model_info_path: Path
+
+
+@dataclass
+class ModelTrainingConfig:
+    train_input_path: Path
+    preprocessor_path: Path
+    best_model: str
+    best_params: dict
+    pipeline_path: Path

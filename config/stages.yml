@@ -67,3 +67,9 @@ model_selection:
   train_input_path: "artifacts/data_preprocessing/train.csv"
   best_model_info_path: "artifacts/model_selection/best_model.json"
 
+model_training:
+  train_input_path: "artifacts/data_preprocessing/train.csv"
+  preprocessor_path: "artifacts/data_preprocessing/preprocessor.joblib"
+  best_model_info_path: "artifacts/model_selection/best_model.json"
+  pipeline_path: "model/trained/pipeline.joblib"
+
