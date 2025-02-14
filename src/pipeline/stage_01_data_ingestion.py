@@ -1,6 +1,6 @@
 from src.config import logger
 from src.components import DataIngestion
-from src.utils import ConfigControl
+from src.config import ConfigControl
 
 STAGE = "Data Ingestion"
 

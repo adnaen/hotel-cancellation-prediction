@@ -21,7 +21,10 @@ def dump_joblib(path: str | Path, data: Any) -> bool:
         abs_path: Path = BasePaths.resolve(path)
         if is_exists(path):
             logger.info(f"{abs_path.name} joblic file already exist on {abs_path}!")
-        joblib.dump(filename=path, value=data)
+        abs_path.parent.mkdir(parents=True, exist_ok=True)
+        print(abs_path.parent)
+        print(abs_path)
+        joblib.dump(filename=abs_path, value=data)
         logger.info(
             f"{abs_path.name} Joblib file has been saved on {abs_path} successfully!"
         )

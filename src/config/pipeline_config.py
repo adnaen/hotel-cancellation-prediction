@@ -3,9 +3,10 @@ from src.entity import (
     DataCleaningConfig,
     DataValidationConfig,
     DataPreprocessingConfig,
+    ModelSelectionConfig,
+    ModelTrainingConfig,
 )
-from src.entity.config_entity import ModelSelectionConfig
-from src.utils import get_config
+from src.utils import get_config, load_json
 from src.config import BasePaths
 
 
@@ -66,5 +67,19 @@ class ConfigControl:
             train_input_path=model_selection["train_input_path"],
             params=cls.params,
             best_model_info_path=model_selection["best_model_info_path"],
+        )
+        return config
+
+    @classmethod
+    def model_training_config(cls) -> ModelTrainingConfig:
+        model_training = cls.config["model_training"]
+        best_model_info = load_json(model_training["best_model_info_path"])
+
+        config = ModelTrainingConfig(
+            train_input_path=model_training["train_input_path"],
+            preprocessor_path=model_training["preprocessor_path"],
+            best_model=str(best_model_info.get("best_model")),
+            best_params=best_model_info.get("best_params", {}),
+            pipeline_path=model_training["pipeline_path"],
         )
         return config

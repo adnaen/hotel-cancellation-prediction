@@ -1,6 +1,6 @@
 from src.config import logger
 from src.components import DataCleaning
-from src.utils import ConfigControl
+from src.config import ConfigControl
 
 STAGE = "DataCleaning"
 

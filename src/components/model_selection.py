@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 
 from src.entity import ModelSelectionConfig
-from src.utils import create_path
+from src.utils import create_path, dump_json
 
 
 class ModelSelection:
@@ -85,16 +85,14 @@ class ModelSelection:
         return False
 
     def save_model_info(self) -> None:
-        import json
-
         best_params = {
             "best_model": self.best_model["name"],
             "best_params": self.best_params,
         }
+        best_params["best_params"].update({"n_jobs": -1})
 
         create_path(self.config.best_model_info_path)
-        with open(self.config.best_model_info_path, "w") as file:
-            json.dump(best_params, file, indent=1)
+        dump_json(path=self.config.best_model_info_path, data=best_params, indent=1)
 
     def _hyperparameter_tunning(self, estimator: Any, params: dict) -> dict:
         from sklearn.model_selection import RandomizedSearchCV
