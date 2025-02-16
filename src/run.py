@@ -7,6 +7,7 @@ from src.pipeline import (
     ModelSelectionPipeline,
     ModelTrainingPipeline,
     ModelEvaluationPipeline,
+    is_exist_stage,
 )
 from src.config import logger
 
@@ -24,7 +25,10 @@ def run_pipeline(pipeline: Any, stage: str) -> None:
     logger.info(
         f"\n{'*' * 100}\n{' ' * 40}STAGE {stage} STARTED{' ' * 40}\n{'*' * 100}"
     )
-    pipeline.run()
+    if not is_exist_stage(stage=stage):
+        pipeline.run()
+        return
+    logger.info(f"Skiping {stage}, since it already run successfully!")
 
     logger.info(f"\n{'*' * 100}\n{' ' * 40}STAGE {stage} END{' ' * 40}\n{'*' * 100}")
 
