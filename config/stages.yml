@@ -73,3 +73,9 @@ model_training:
   best_model_info_path: "artifacts/model_selection/best_model.json"
   pipeline_path: "model/trained/pipeline.joblib"
 
+model_evaluation:
+  pipeline_path: "model/trained/pipeline.joblib"
+  test_data_path: "artifacts/data_preprocessing/test.csv"
+  output_path: "artifacts/model_evaluation/metrics.json"
+
+

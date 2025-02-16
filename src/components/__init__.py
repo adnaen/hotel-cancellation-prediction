@@ -4,3 +4,4 @@ from .data_validation import DataValidation
 from .data_preprocessing import DataPreprocessing
 from .model_selection import ModelSelection
 from .model_training import ModelTraining
+from .model_evluation import ModelEvaluation

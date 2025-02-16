@@ -49,3 +49,10 @@ class ModelTrainingConfig:
     best_model: str
     best_params: dict
     pipeline_path: Path
+
+
+@dataclass
+class ModelEvaluationConfig:
+    pipeline_path: Path
+    test_data_path: Path
+    output_path: Path

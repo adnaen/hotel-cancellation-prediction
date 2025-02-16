@@ -6,6 +6,7 @@ from src.pipeline import (
     DataPreprocessingPipeline,
     ModelSelectionPipeline,
     ModelTrainingPipeline,
+    ModelEvaluationPipeline,
 )
 from src.config import logger
 
@@ -35,3 +36,4 @@ if __name__ == "__main__":
     run_pipeline(DataPreprocessingPipeline(), stage="Data Preprocessing")
     run_pipeline(ModelSelectionPipeline(), stage="Model Selection")
     run_pipeline(ModelTrainingPipeline(), stage="Model Training")
+    run_pipeline(ModelEvaluationPipeline(), stage="Model Evaluation")

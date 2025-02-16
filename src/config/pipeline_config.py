@@ -5,6 +5,7 @@ from src.entity import (
     DataPreprocessingConfig,
     ModelSelectionConfig,
     ModelTrainingConfig,
+    ModelEvaluationConfig,
 )
 from src.utils import get_config, load_json
 from src.config import BasePaths
@@ -81,5 +82,16 @@ class ConfigControl:
             best_model=str(best_model_info.get("best_model")),
             best_params=best_model_info.get("best_params", {}),
             pipeline_path=model_training["pipeline_path"],
+        )
+        return config
+
+    @classmethod
+    def model_evaluation_config(cls) -> ModelEvaluationConfig:
+        model_evaluation = cls.config["model_evaluation"]
+
+        config = ModelEvaluationConfig(
+            test_data_path=model_evaluation["test_data_path"],
+            pipeline_path=model_evaluation["pipeline_path"],
+            output_path=model_evaluation["output_path"],
         )
         return config

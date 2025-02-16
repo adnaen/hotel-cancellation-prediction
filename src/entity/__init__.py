@@ -5,4 +5,5 @@ from .config_entity import (
     DataPreprocessingConfig,
     ModelSelectionConfig,
     ModelTrainingConfig,
+    ModelEvaluationConfig,
 )
