@@ -14,7 +14,7 @@ class ModelTrainingPipeline:
         self.pipeline = ModelTraining(config=self.config)
 
     def run(self) -> bool:
-        status = self.pipeline.fit_model()
+        status = self.pipeline.choose_model()
         status = self.pipeline.train_model()
         status = self.pipeline.save_model()
         return True if status else False

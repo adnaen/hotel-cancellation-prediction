@@ -1,4 +1,4 @@
-from src.utils import from_gdrive
+from src.utils.common import from_gdrive
 from src.entity import DataIngestionConfig
 
 

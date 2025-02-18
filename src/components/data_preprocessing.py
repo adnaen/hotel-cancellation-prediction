@@ -7,7 +7,8 @@ from sklearn.model_selection import train_test_split
 
 from src.entity import DataPreprocessingConfig
 from src.config import logger
-from src.utils import dump_joblib, create_path
+from src.utils.joblib_utils import dump_joblib
+from src.utils.common import create_path
 
 
 class DataPreprocessing:

@@ -1,5 +1,5 @@
 from src.entity import DataValidationConfig
-from src.utils import load_csv
+from src.utils.dataset_utils import load_csv
 from src.config import logger
 
 

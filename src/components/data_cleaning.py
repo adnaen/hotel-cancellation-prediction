@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.pipeline import Pipeline
 
-from src.utils import create_path
+from src.utils.common import create_path
 from src.config import logger
 from src.entity import DataCleaningConfig
 from src.utils.transformers import (

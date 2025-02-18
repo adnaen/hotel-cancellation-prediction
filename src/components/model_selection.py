@@ -1,16 +1,14 @@
 from typing import Any
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import (
-    cross_val_score,
-    StratifiedKFold,
-)
+from sklearn.model_selection import cross_val_score, StratifiedKFold
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 
 from src.entity import ModelSelectionConfig
-from src.utils import create_path, dump_json
+from src.utils.common import create_path
+from src.utils.json_utils import dump_json
 
 
 class ModelSelection:
@@ -24,10 +22,28 @@ class ModelSelection:
         self.best_params: dict | None = None
 
     def split_data(self) -> None:
+        """
+        split train data into x,y
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.x_train = self.train.drop(columns=["is_canceled"])
         self.y_train = self.train["is_canceled"].values.ravel()
 
     def select_model(self) -> None:
+        """
+        select best model and , using cross validation
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         models = {
             "DecisionTreeClassifier": DecisionTreeClassifier(),
             "RandomForestClassifier": RandomForestClassifier(),
@@ -58,6 +74,15 @@ class ModelSelection:
         print(f"Best model : {self.best_model}")
 
     def tune_model(self) -> bool:
+        """
+        Hyperparameter tunning of best model
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         model_name = self.best_model.get("name", "")
         match model_name:
             case "DecisionTreeClassifier":
@@ -85,6 +110,15 @@ class ModelSelection:
         return False
 
     def save_model_info(self) -> None:
+        """
+        save model info into json file.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         best_params = {
             "best_model": self.best_model["name"],
             "best_params": self.best_params,
@@ -95,6 +129,16 @@ class ModelSelection:
         dump_json(path=self.config.best_model_info_path, data=best_params, indent=1)
 
     def _hyperparameter_tunning(self, estimator: Any, params: dict) -> dict:
+        """
+        perform hyperparameter tunning using RandomizedSeach
+
+        Args:
+            estimator (Any) : model object
+            params (dict) : param distribution
+
+        Returns:
+            dict : best params
+        """
         from sklearn.model_selection import RandomizedSearchCV
 
         model = RandomizedSearchCV(
