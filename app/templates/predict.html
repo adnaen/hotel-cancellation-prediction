@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% include 'cdns.html'%}
+    <title>HOTEL CANCELLATION PREDICTION</title>
+  </head>
+  <body class="container">
+    <h1 class="mt-3 text-center text-uppercase">
+      Hotel Booking Cancellation Prediction
+    </h1>
+    <section class="container shadow bg-white rounded p-5">
+      <h3>Predicted Result</h3>
+      {% for prediction in predictions %} {% if prediction == 1 %}
+
+      <span class="d-block"
+        >{{loop.index}}. PROBABLY <span class="text-danger">CANCEL</span> BOOKED
+        TICKET</span
+      >
+      {% else %}
+      <span class="d-block"
+        >{{loop.index}}. PROBABLY
+        <span class="text-success">NOT CANCEL</span> BOOKED TICKET</span
+      >
+      {% endif %} {% endfor %}
+    </section>
+    <section class="text-center">
+      Go to <a href="{{ url_for('home') }}">Home</a>
+    </section>
+  </body>
+</html>

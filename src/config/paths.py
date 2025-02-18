@@ -10,6 +10,7 @@ class BasePaths:
     DATA_DIR: Path = PROJECT_DIR / "data"
     ARTIFACTS_DIR: Path = PROJECT_DIR / "artifacts"
     CONFIG_DIR: Path = PROJECT_DIR / "config"
+    MODEL_DIR: Path = PROJECT_DIR / "model"
 
     @classmethod
     def resolve(cls, relative_path: Path | str) -> Path:

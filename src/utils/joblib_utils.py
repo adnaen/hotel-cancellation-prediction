@@ -3,7 +3,7 @@ from typing import Any
 from pathlib import Path
 
 from src.config import logger, BasePaths
-from src.utils import is_exists
+from src.utils.common import is_exists
 
 
 def dump_joblib(path: str | Path, data: Any) -> bool:

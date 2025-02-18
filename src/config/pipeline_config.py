@@ -7,7 +7,8 @@ from src.entity import (
     ModelTrainingConfig,
     ModelEvaluationConfig,
 )
-from src.utils import get_config, load_json
+from src.utils.yaml_utils import get_config
+from src.utils.json_utils import load_json
 from src.config import BasePaths
 
 

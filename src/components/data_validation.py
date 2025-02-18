@@ -1,5 +1,5 @@
+import pandas as pd
 from src.entity import DataValidationConfig
-from src.utils.dataset_utils import load_csv
 from src.config import logger
 
 
@@ -12,7 +12,7 @@ class DataValidation:
             config (DataValidationConfig) : configuration for DataValidation
         """
         self.config = config
-        self.df = load_csv(path=self.config.input_path)
+        self.df = pd.read_csv(self.config.input_path)
 
     def structural_validation(self) -> bool:
         """
